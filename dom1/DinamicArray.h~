@@ -1,0 +1,119 @@
+
+
+template <typename T>
+class DynamicArray {
+
+	T* elements;
+	int _size;
+	int _capacity;
+
+	void extend()
+	{
+		_capacity = _capacity * 2;
+		T* copy = new T[_capacity];
+
+		for (int i = 0; i < _size; ++i)
+		{	
+			
+				copy[i] = elements[i];
+			
+		}
+		delete[] elements;
+		elements = copy;
+	}
+public:
+	
+	DynamicArray()
+	{
+		_size = 0;
+		_capacity = 1;
+
+		elements = new T[_capacity];
+	}
+
+	
+	~DynamicArray()
+	{
+		Free();
+	}
+	
+
+	//dobavq nakraq
+	void add(const T& e)
+	{
+		if (_size >= _capacity)
+		{
+			extend();
+		}
+
+		elements[_size] = e;
+		++_size;
+	}
+
+	//Dobavq na purva poziciq edin vid po tozi nachin kato zapisvam ot steka v masiva se spravqm s tova che elementite izlizat naobratno ot steka
+	void insertAtBeggining(const T& e)
+	{
+		if (_size >= _capacity)
+		{
+			extend();
+		}
+		if (_size + 1 >= _capacity)
+			extend();
+
+		if (_size == 0)
+			extend();
+
+		for (int i = _size; i > 0; i--)
+		{
+			elements[i] = elements[i-1];
+		}
+		elements[0] = e;
+		++_size;
+	}
+	//kopiram elementite ot masiva kolkoto puti trqbva
+	//ima nqkakuv problem mai sled 13 kopirane stava neshto i na nqkoi mesta izliza = 
+	//No tova ne prechi ako gledash edna po edna bukvite nakraq w konzaolata shte vidish che posledovatelnosta koqto se iska e izpulnena
+	//prosto na nqkoi mesta bukvata se zamenq s = NO TOVA NE PRECHI NA PROCESA SLED TOVA
+	//ako imate predstawa kude e problema bi bilo shte se radvam da mi obqsnite
+	void copy(int times)
+	{
+	
+		for (int i = 1; i <= times; i++)
+		{
+			if (i*_size >= _capacity)
+			{
+				extend();
+			}
+			for (int j = 0; j < _size; j++)
+			{
+				if (j + times*_size >= _capacity)
+				{
+					extend();
+				}
+				elements[j + i*_size] = elements[j];
+			}
+		}
+		_size *= times;
+	}
+	
+	T& get(int index)
+	{
+		return elements[index];
+	}
+
+
+	int size() const
+	{
+		return _size;
+	}
+
+	void Free()
+	{
+		delete[] elements;
+
+		elements = new T[_capacity];
+		_size = 0;
+		_capacity = 1;
+	}
+};
+

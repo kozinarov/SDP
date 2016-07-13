@@ -1,0 +1,70 @@
+#pragma once
+
+
+//steka poprincip mi raboti no kogato ne podavam koordinati a samo edno chislo
+//v tazi zadacha mi podavam struktura ot koordinati i neshto ni dava greshka no ako podam neshto koeto ne e struktura mi raboti
+//poprincip ako polzvam dve opashki za x i y nqma da ima problen no az izkam s struktura za da e edna opashka no neshto ne stava :)
+using namespace std;
+template <class T>
+class Stack {
+	class node {
+	public:
+		T data;
+		node* next;
+
+		node(T const &d) : data(d), next(0) {}
+
+	//tuk dava greshka
+		node() : data(NULL), next(NULL) {}
+	};
+	
+	node *head;
+
+public:
+	Stack() : head(0) {}
+
+	~Stack() {
+		if (head) {
+			node* current = head;
+			node* next = 0;
+			while (current != 0) {
+				next = current->next;
+				delete current;
+				current = next;
+			}
+		}
+	}
+
+	void push(const T& item)
+	{
+		node *n = new node;
+		n->data = item;
+		n->next = head;
+		head = n;
+	}
+	void pop()
+	{
+		node *n = head;
+		head = head->next;
+		n->next = NULL;
+		delete n;
+	}
+	T top()
+	{
+		if (head)
+		{
+			node *n = head;
+			return n->data;
+		}
+		
+
+	}
+	bool empty()
+	{
+		if (!head)
+			return NULL;
+	}
+
+};
+
+

@@ -1,0 +1,132 @@
+// dom1.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include "Stack.h"
+#include "DinamicArray.h"
+#include <string>
+#include <stack>
+
+//Ne mi raboti samo za po-golqmi ot ednocifrenite chisla
+
+using namespace std;
+int main()
+{	
+	Stack<char> _Stack;
+	DynamicArray<char> letters;
+	DynamicArray<char> templetters;
+
+	string string;
+	cout << "Enter string: ";
+	getline(cin, string);
+	
+	char top;
+	char lasttop;
+	//Pulnq steka
+	for (int i = 0; i < string.length(); i++)
+	{	
+		
+		_Stack.push(string[i]);
+	}
+	
+	
+
+	int cntlasttop = 0;
+	
+	while (_Stack.head())											
+	{	
+		top = _Stack.head();
+		//Gledam za )  ako ima q maxam
+		if (top == ')')
+		{
+			_Stack.pop();
+			//populvam krainiq niz s tova ot vremenniq )
+			for (int j = 0; j < templetters.size(); j++)
+			{
+				letters.insertAtBeggining(templetters.get(j));
+			}
+			templetters.Free();
+			
+			
+			
+		}
+		//Gledam za bukvi
+		if(top >= 'A' && top <= 'Z')
+		{	
+			
+			templetters.add(top);
+			_Stack.pop();
+			
+		}
+
+		//Gledam za ( ako ima q maxam
+		if (top == '(')
+		{
+			_Stack.pop();
+			
+		//Gledam dali lasttop e cifra ako da  cntlasttop go prava raven na edinica
+		//Tova go pravva za da moga da razlichavam koga ima ( i sled neq cifra ili kogato ima skoba i slqd neq bukwa za da znam kakvo da prava
+		//Kogato ima ( i sled neq cibra trqva da popalna krainiq niz s informaziqta ot vremenniq i posle da umnoja krainiq
+		//Kogato ima ( i sled neq bukva prqbva maprawoga ga umnoja wremmenniq 
+			if (lasttop >= '0' && lasttop <= '9')
+			{
+				cntlasttop = 1;
+			}
+			else
+			{
+				cntlasttop = 0;
+			}
+			
+		}
+	
+		//gledam dali ima bukvi
+		if (top >= '0' && top <= '9')
+		{	
+			//towa e kogato imam ( i sled tova bukwa
+				if (cntlasttop == 1)
+				{
+	
+					for (int j = 0; j < templetters.size(); j++)
+					{
+						letters.insertAtBeggining(templetters.get(j));
+					}
+					//prevrushtam ot char v int
+					int convchar = top - '0';
+					letters.copy(convchar);
+					templetters.Free();
+				}
+				else
+				{
+					//tova e kogato imam ( i sled neq bukva
+					int convchar = top - '0';
+					templetters.copy(convchar);
+
+				
+				}
+			
+			_Stack.pop();
+		
+		}
+			lasttop = top;
+		
+	}
+	//populvam za posledno krainiq niz
+	for (int j = 0; j < templetters.size(); j++)
+	{
+		letters.insertAtBeggining(templetters.get(j)); 
+	}
+
+	//printiram krainiq niz
+	for (int i = 0; i < letters.size(); i++)
+	{
+
+		cout << letters.get(i);
+	}
+	cout << endl;
+
+	
+
+    return 0;
+}
+
